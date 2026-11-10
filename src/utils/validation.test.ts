@@ -6,6 +6,7 @@ import {
   validateEmail,
   generateDefaultSignature,
   DEFAULT_FORM_DATA,
+  OFFICIAL_REPUBLIC_HALL_LOGO,
 } from './validation';
 
 test('sanitizeFileName formats applicant name safely for PDF download', () => {
@@ -47,4 +48,5 @@ test('DEFAULT_FORM_DATA has correct official specifications', () => {
   assert.equal(DEFAULT_FORM_DATA.phoneNumber, '0240000000');
   assert.equal(DEFAULT_FORM_DATA.emailAddress, 'jmensah@knust.edu.gh');
   assert.equal(DEFAULT_FORM_DATA.date, 'November 10, 2026');
+  assert.equal(DEFAULT_FORM_DATA.crestUrl, OFFICIAL_REPUBLIC_HALL_LOGO);
 });

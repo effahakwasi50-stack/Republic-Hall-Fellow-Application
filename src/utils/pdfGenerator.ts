@@ -45,11 +45,14 @@ export async function generateA4Pdf({
       windowWidth: 1200,
       imageTimeout: 15000,
       onclone: (clonedDoc) => {
-        // Remove or sanitize any style tags with oklch to ensure html2canvas parser compatibility
+        // Sanitize any style tags with modern color functions (oklch, oklab, color-mix) for html2canvas compatibility
         const styles = clonedDoc.querySelectorAll('style');
         styles.forEach((style) => {
-          if (style.textContent && style.textContent.includes('oklch')) {
-            style.textContent = style.textContent.replace(/oklch\([^)]+\)/g, '#111827');
+          if (style.textContent) {
+            style.textContent = style.textContent
+              .replace(/oklch\([^)]+\)/gi, '#111827')
+              .replace(/oklab\([^)]+\)/gi, '#111827')
+              .replace(/color-mix\([^)]+\)/gi, '#111827');
           }
         });
       },

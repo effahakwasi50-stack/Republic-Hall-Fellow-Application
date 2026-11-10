@@ -8,13 +8,15 @@ export interface ApplicationFormData {
   signatureUrl: string;
 }
 
+export const OFFICIAL_REPUBLIC_HALL_LOGO = '/assets/aistudio/logo.jpg_982440ba.png';
+
 export const DEFAULT_FORM_DATA: ApplicationFormData = {
   fullNameAndTitle: 'Dr. John Mensah, Senior Lecturer',
   department: 'Department of Mechanical Engineering',
   phoneNumber: '0240000000',
   emailAddress: 'jmensah@knust.edu.gh',
   date: 'November 10, 2026',
-  crestUrl: '',
+  crestUrl: OFFICIAL_REPUBLIC_HALL_LOGO,
   signatureUrl: '',
 };
 

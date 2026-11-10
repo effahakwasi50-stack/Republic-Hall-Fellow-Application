@@ -1,0 +1,57 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --republic-green: #0b6623;
+    --republic-gold: #d4af37;
+    --republic-slate: #0f172a;
+  }
+
+  body {
+    background-color: #0f172a;
+    color: #f8fafc;
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  }
+}
+
+.font-times {
+  font-family: 'Times New Roman', Times, 'Nimbus Roman No9 L', serif;
+}
+
+.letter-heading-font {
+  font-family: 'Cinzel', 'Times New Roman', serif;
+}
+
+/* Print Styles */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 0;
+  }
+
+  body {
+    background: white !important;
+    color: black !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  .print-only {
+    display: block !important;
+  }
+
+  #printable-letter-container {
+    padding: 0 !important;
+    margin: 0 !important;
+    background: white !important;
+    box-shadow: none !important;
+    width: 210mm !important;
+    min-height: 297mm !important;
+    max-width: 210mm !important;
+    transform: none !important;
+  }
+}

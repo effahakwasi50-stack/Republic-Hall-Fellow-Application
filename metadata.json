@@ -1,0 +1,6 @@
+{
+  "name": "Republic Hall Fellow Application Portal - KNUST",
+  "description": "Official application letter generator and appointment portal for Republic Hall Fellows at Kwame Nkrumah University of Science and Technology (KNUST).",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

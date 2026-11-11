@@ -46,6 +46,13 @@ export default function App() {
 
   const sheetRef = useRef<HTMLDivElement | null>(null);
 
+  const isComplete = Boolean(
+    formData.fullNameAndTitle.trim() &&
+    formData.department.trim() &&
+    formData.phoneNumber.trim() &&
+    formData.signatureUrl
+  );
+
   // Auto-hide toast after 4s
   useEffect(() => {
     if (successToast) {
@@ -170,12 +177,15 @@ export default function App() {
               <button
                 type="button"
                 onClick={handleDownloadPdf}
-                disabled={isGeneratingPdf}
+                disabled={isGeneratingPdf || !isComplete}
                 className={`inline-flex items-center gap-2 px-4 py-2 text-xs sm:text-sm font-bold rounded-lg shadow-md transition-all ${
                   isGeneratingPdf
                     ? 'bg-amber-600/80 text-white cursor-wait'
-                    : 'bg-[#d4af37] hover:bg-[#e6c34e] text-slate-950 hover:shadow-lg hover:scale-[1.02] active:scale-[0.98]'
+                    : isComplete
+                    ? 'bg-[#d4af37] hover:bg-[#e6c34e] text-slate-950 hover:shadow-lg hover:scale-[1.02] active:scale-[0.98]'
+                    : 'bg-slate-700/80 text-slate-400 cursor-not-allowed opacity-80'
                 }`}
+                title={isComplete ? 'Download official A4 PDF' : 'Complete required fields and signature to download'}
               >
                 {isGeneratingPdf ? (
                   <>
@@ -246,6 +256,21 @@ export default function App() {
                 <FileDown className="w-4 h-4 text-[#d4af37]" />
                 Export & Print Options
               </h3>
+
+              {!isComplete ? (
+                <div className="p-3 rounded-lg bg-amber-950/40 border border-amber-800/60 text-xs text-amber-200/90 flex items-start gap-2">
+                  <span className="text-base leading-none">💡</span>
+                  <span>
+                    Complete your Full Name, Department, Phone Number, and Electronic Signature to unlock official PDF download.
+                  </span>
+                </div>
+              ) : (
+                <div className="p-2.5 rounded-lg bg-emerald-950/40 border border-emerald-800/60 text-xs text-emerald-300 flex items-center gap-2">
+                  <CheckCircle className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <span>All required fields completed. Official PDF ready for export.</span>
+                </div>
+              )}
+
               <p className="text-xs text-slate-400 leading-relaxed">
                 The downloaded document produces a clean, high-resolution A4 sheet (794px × 1123px at 2x scale) compliant with Hall Council submission protocols.
               </p>
@@ -253,10 +278,14 @@ export default function App() {
                 <button
                   type="button"
                   onClick={handleDownloadPdf}
-                  disabled={isGeneratingPdf}
-                  className="flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg bg-[#0b6623] hover:bg-[#0e7c2c] text-white text-xs font-semibold transition-colors"
+                  disabled={isGeneratingPdf || !isComplete}
+                  className={`flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg text-xs font-semibold transition-all ${
+                    isComplete
+                      ? 'bg-[#0b6623] hover:bg-[#0e7c2c] text-white shadow-sm cursor-pointer'
+                      : 'bg-slate-800 text-slate-500 border border-slate-700 cursor-not-allowed'
+                  }`}
                 >
-                  <Download className="w-3.5 h-3.5 text-[#d4af37]" />
+                  <Download className={`w-3.5 h-3.5 ${isComplete ? 'text-[#d4af37]' : 'text-slate-500'}`} />
                   <span>Download PDF</span>
                 </button>
                 <button

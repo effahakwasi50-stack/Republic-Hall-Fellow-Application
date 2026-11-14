@@ -30,8 +30,8 @@ test('validateGhanaianPhone accepts valid Ghanaian phone numbers', () => {
   assert.equal(invalidRes.isValid, false);
 });
 
-test('validateEmail checks standard email syntax or permits optional empty string', () => {
-  assert.equal(validateEmail('').isValid, true);
+test('validateEmail checks standard email syntax and requires a value', () => {
+  assert.equal(validateEmail('').isValid, false);
   assert.equal(validateEmail('jmensah@knust.edu.gh').isValid, true);
   assert.equal(validateEmail('invalid-email-address').isValid, false);
 });
@@ -42,11 +42,12 @@ test('generateDefaultSignature returns valid svg data uri', () => {
   assert.ok(sig.includes('John%20Mensah'));
 });
 
-test('DEFAULT_FORM_DATA has correct official specifications', () => {
-  assert.equal(DEFAULT_FORM_DATA.fullNameAndTitle, 'Dr. John Mensah, Senior Lecturer');
-  assert.equal(DEFAULT_FORM_DATA.department, 'Department of Mechanical Engineering');
-  assert.equal(DEFAULT_FORM_DATA.phoneNumber, '0240000000');
-  assert.equal(DEFAULT_FORM_DATA.emailAddress, 'jmensah@knust.edu.gh');
-  assert.equal(DEFAULT_FORM_DATA.date, 'November 10, 2026');
+test('DEFAULT_FORM_DATA starts empty so examples appear only as placeholders', () => {
+  assert.equal(DEFAULT_FORM_DATA.fullNameAndTitle, '');
+  assert.equal(DEFAULT_FORM_DATA.department, '');
+  assert.equal(DEFAULT_FORM_DATA.phoneNumber, '');
+  assert.equal(DEFAULT_FORM_DATA.emailAddress, '');
+  assert.equal(DEFAULT_FORM_DATA.date, '');
+  assert.equal(DEFAULT_FORM_DATA.signatureUrl, '');
   assert.equal(DEFAULT_FORM_DATA.crestUrl, OFFICIAL_REPUBLIC_HALL_LOGO);
 });

@@ -10,17 +10,25 @@ export interface ApplicationFormData {
 
 export const OFFICIAL_REPUBLIC_HALL_LOGO = '/assets/aistudio/logo.jpg_982440ba.png';
 
+// The form starts empty; example values are shown only as greyed-out placeholders.
 export const DEFAULT_FORM_DATA: ApplicationFormData = {
-  fullNameAndTitle: 'Dr. John Mensah, Senior Lecturer',
-  department: 'Department of Mechanical Engineering',
-  phoneNumber: '0240000000',
-  emailAddress: 'jmensah@knust.edu.gh',
-  date: 'November 10, 2026',
+  fullNameAndTitle: '',
+  department: '',
+  phoneNumber: '',
+  emailAddress: '',
+  date: '',
   crestUrl: OFFICIAL_REPUBLIC_HALL_LOGO,
   signatureUrl: '',
 };
 
-export const OFFICIAL_LETTER_BODY = `I write to formally express my strong interest in serving as a Hall Fellow for Republic Hall, bringing a deep commitment to student mentorship, academic excellence, and holistic campus development to the Hall’s administration. Having closely supported student life within the university community, I am well-equipped to mediate student concerns, maintain disciplinary standards, and act as a reliable bridge between Hall Management and residents. If given the opportunity, I will collaborate effectively with the Hall Master, Senior Tutor, and student leaders to uphold the proud traditions and unity of Republic Hall, and I look forward to discussing my suitability in an interview.`;
+export const HALL_TUTOR_PHONE = '0506759271';
+export const HALL_TUTOR_WHATSAPP = '233506759271';
+
+export const OFFICIAL_LETTER_PARAGRAPHS = [
+  'I write to formally express my interest in being a Fellow of Republic Hall, KNUST.',
+  'I am eager to join this family and collaborate with colleague Fellows in advancing the traditions of the hall and providing mentorship to junior members.',
+  'I thank you for your kind consideration and look forward to hearing favorably from you soon',
+];
 
 /**
  * Sanitizes an applicant name to create a safe PDF filename.
@@ -61,12 +69,12 @@ export function validateGhanaianPhone(phone: string): { isValid: boolean; messag
 }
 
 /**
- * Validates email address (optional field in the form).
+ * Validates email address (required field in the form).
  */
 export function validateEmail(email: string): { isValid: boolean; message?: string } {
   const trimmed = email.trim();
   if (!trimmed) {
-    return { isValid: true }; // optional
+    return { isValid: false, message: 'Email address is required.' };
   }
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(trimmed)) {

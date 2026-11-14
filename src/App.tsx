@@ -23,20 +23,19 @@ import {
 import {
   ApplicationFormData,
   DEFAULT_FORM_DATA,
-  generateDefaultSignature,
+  validateEmail,
+  validateGhanaianPhone,
 } from './utils/validation';
+import { SendToHallTutor } from './components/SendToHallTutor';
 import { FormPanel } from './components/FormPanel';
 import { A4LetterPreview } from './components/A4LetterPreview';
 import { CrestEmblem } from './components/CrestEmblem';
 import { generateA4Pdf } from './utils/pdfGenerator';
 
 export default function App() {
-  // Initialize with official default sample inputs
-  const [formData, setFormData] = useState<ApplicationFormData>(() => ({
-    ...DEFAULT_FORM_DATA,
-    // Initialize with a clean signature sample for John Mensah so the preview is ready immediately
-    signatureUrl: generateDefaultSignature(DEFAULT_FORM_DATA.fullNameAndTitle),
-  }));
+  // Start with an empty form; example values appear only as placeholders
+  const [formData, setFormData] = useState<ApplicationFormData>(() => ({ ...DEFAULT_FORM_DATA }));
+  const [downloadedPdf, setDownloadedPdf] = useState<{ blob: Blob; fileName: string } | null>(null);
 
   const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
   const [pdfStatus, setPdfStatus] = useState<string>('');
@@ -49,7 +48,9 @@ export default function App() {
   const isComplete = Boolean(
     formData.fullNameAndTitle.trim() &&
     formData.department.trim() &&
-    formData.phoneNumber.trim() &&
+    formData.date.trim() &&
+    validateGhanaianPhone(formData.phoneNumber).isValid &&
+    validateEmail(formData.emailAddress).isValid &&
     formData.signatureUrl
   );
 
@@ -62,11 +63,9 @@ export default function App() {
   }, [successToast]);
 
   const handleResetSample = () => {
-    setFormData({
-      ...DEFAULT_FORM_DATA,
-      signatureUrl: generateDefaultSignature(DEFAULT_FORM_DATA.fullNameAndTitle),
-    });
-    setSuccessToast('Sample academic inputs restored successfully.');
+    setFormData({ ...DEFAULT_FORM_DATA });
+    setDownloadedPdf(null);
+    setSuccessToast('Form cleared.');
   };
 
   const handleDownloadPdf = async () => {
@@ -75,12 +74,13 @@ export default function App() {
     setPdfStatus('Initiating PDF export...');
 
     try {
-      await generateA4Pdf({
+      const result = await generateA4Pdf({
         element: sheetRef.current,
         fullName: formData.fullNameAndTitle,
         onProgress: (status) => setPdfStatus(status),
       });
-      setSuccessToast('Official PDF downloaded successfully!');
+      setDownloadedPdf(result);
+      setSuccessToast('PDF downloaded! Now send it to the Hall Tutor on WhatsApp.');
     } catch (err) {
       console.error('PDF Generation failed:', err);
       alert('Could not generate PDF. Please try using "Print / Save as PDF" instead.');
@@ -254,14 +254,14 @@ export default function App() {
             <div className="bg-slate-900/60 rounded-xl border border-slate-800 p-4 space-y-3">
               <h3 className="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
                 <FileDown className="w-4 h-4 text-[#d4af37]" />
-                Export & Print Options
+                Step 1: Download Your Signed PDF
               </h3>
 
               {!isComplete ? (
                 <div className="p-3 rounded-lg bg-amber-950/40 border border-amber-800/60 text-xs text-amber-200/90 flex items-start gap-2">
                   <span className="text-base leading-none">💡</span>
                   <span>
-                    Complete your Full Name, Department, Phone Number, and Electronic Signature to unlock official PDF download.
+                    Complete your Full Name, College/Department, Phone Number, Email Address, Application Date, and Electronic Signature to unlock official PDF download.
                   </span>
                 </div>
               ) : (
@@ -298,6 +298,8 @@ export default function App() {
                 </button>
               </div>
             </div>
+
+            <SendToHallTutor pdf={downloadedPdf} />
           </section>
 
           {/* Right Panel: Live A4 Paper Preview */}
@@ -357,6 +359,13 @@ export default function App() {
                 zoomLevel={manualZoom}
               />
             </div>
+
+            {/* On small screens the form column is hidden in Preview mode, so show the send step here too */}
+            {activeMobileView === 'preview' && (
+              <div className="no-print lg:hidden w-full mt-4">
+                <SendToHallTutor pdf={downloadedPdf} />
+              </div>
+            )}
 
             {/* Mobile Helper switch notice */}
             <div className="no-print lg:hidden w-full mt-3 text-center">

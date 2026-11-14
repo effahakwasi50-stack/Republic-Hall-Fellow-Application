@@ -16,7 +16,7 @@ export async function generateA4Pdf({
   element,
   fullName,
   onProgress,
-}: GeneratePdfOptions): Promise<void> {
+}: GeneratePdfOptions): Promise<{ blob: Blob; fileName: string }> {
   onProgress?.('Preparing document for export...');
 
   // Save previous inline styles
@@ -78,8 +78,10 @@ export async function generateA4Pdf({
 
     const fileName = sanitizeFileName(fullName);
     pdf.save(fileName);
+    const blob = pdf.output('blob');
 
     onProgress?.('PDF download completed!');
+    return { blob, fileName };
   } finally {
     // Restore original responsive scale styles
     element.style.transform = prevTransform;

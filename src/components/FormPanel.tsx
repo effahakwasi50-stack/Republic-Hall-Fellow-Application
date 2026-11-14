@@ -5,7 +5,6 @@ import {
   Phone,
   Mail,
   Calendar,
-  Image as ImageIcon,
   RotateCcw,
   Sparkles,
   CheckCircle2,
@@ -16,10 +15,8 @@ import {
   ApplicationFormData,
   validateGhanaianPhone,
   validateEmail,
-  DEFAULT_FORM_DATA,
 } from '../utils/validation';
 import { SignaturePad } from './SignaturePad';
-import { CrestEmblem } from './CrestEmblem';
 
 interface FormPanelProps {
   data: ApplicationFormData;
@@ -72,10 +69,10 @@ export const FormPanel: React.FC<FormPanelProps> = ({
           type="button"
           onClick={onResetSample}
           className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-amber-300 hover:text-white bg-amber-950/40 hover:bg-amber-900/60 border border-amber-800/80 rounded-lg transition-colors"
-          title="Restore generic academic sample inputs"
+          title="Clear all fields and start again"
         >
           <RotateCcw className="w-3.5 h-3.5" />
-          <span>Reset Sample</span>
+          <span>Clear Form</span>
         </button>
       </div>
 
@@ -111,7 +108,7 @@ export const FormPanel: React.FC<FormPanelProps> = ({
           >
             <span className="flex items-center gap-1.5">
               <GraduationCap className="w-3.5 h-3.5 text-[#d4af37]" />
-              Department (KNUST)
+              College/Faculty/Department/Office/Center (KNUST)
             </span>
             <span className="text-[10px] text-emerald-400 font-medium">Required</span>
           </label>
@@ -146,7 +143,7 @@ export const FormPanel: React.FC<FormPanelProps> = ({
                 type="tel"
                 value={data.phoneNumber}
                 onChange={(e) => handleInputChange('phoneNumber', e.target.value)}
-                placeholder="0240000000"
+                placeholder="e.g. 0240000000"
                 className={`w-full bg-slate-800/80 border rounded-lg px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#0b6623] focus:border-[#d4af37] transition-all ${
                   !phoneValidation.isValid && data.phoneNumber
                     ? 'border-rose-500'
@@ -166,7 +163,7 @@ export const FormPanel: React.FC<FormPanelProps> = ({
             )}
           </div>
 
-          {/* 4. Email Address (Optional) */}
+          {/* 4. Email Address (Required) */}
           <div className="space-y-1.5">
             <label
               htmlFor="email-input"
@@ -176,7 +173,7 @@ export const FormPanel: React.FC<FormPanelProps> = ({
                 <Mail className="w-3.5 h-3.5 text-[#d4af37]" />
                 Email Address
               </span>
-              <span className="text-[10px] text-slate-400">Optional</span>
+              <span className="text-[10px] text-emerald-400 font-medium">Required</span>
             </label>
             <div className="relative">
               <input
@@ -184,12 +181,13 @@ export const FormPanel: React.FC<FormPanelProps> = ({
                 type="email"
                 value={data.emailAddress}
                 onChange={(e) => handleInputChange('emailAddress', e.target.value)}
-                placeholder="jmensah@knust.edu.gh"
+                placeholder="e.g. jmensah@knust.edu.gh"
                 className={`w-full bg-slate-800/80 border rounded-lg px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#0b6623] focus:border-[#d4af37] transition-all ${
                   !emailValidation.isValid && data.emailAddress
                     ? 'border-rose-500'
                     : 'border-slate-700'
                 }`}
+                required
               />
               {emailValidation.isValid && data.emailAddress && (
                 <CheckCircle2 className="w-4 h-4 text-emerald-400 absolute right-3 top-3 pointer-events-none" />
@@ -231,37 +229,6 @@ export const FormPanel: React.FC<FormPanelProps> = ({
             className="w-full bg-slate-800/80 border border-slate-700 rounded-lg px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#0b6623] focus:border-[#d4af37] transition-all"
             required
           />
-        </div>
-
-        {/* 6. Official Hall Logo (Automatically Attached) */}
-        <div className="p-4 rounded-xl bg-slate-800/40 border border-slate-700/80 space-y-3">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-200 flex items-center gap-1.5">
-              <ImageIcon className="w-3.5 h-3.5 text-[#d4af37]" />
-              Official Hall Crest
-            </span>
-            <span className="text-[11px] text-emerald-400 font-medium bg-emerald-950/70 px-2 py-0.5 rounded border border-emerald-800/60 flex items-center gap-1">
-              <CheckCircle2 className="w-3 h-3 text-emerald-400" />
-              Automatically Attached
-            </span>
-          </div>
-
-          <div className="flex items-center gap-3.5 bg-slate-900/60 p-3 rounded-lg border border-slate-800">
-            {/* Visual thumbnail */}
-            <div className="w-14 h-14 rounded-full bg-white flex items-center justify-center p-0.5 border border-slate-600 shrink-0 shadow-md">
-              <CrestEmblem customImage={data.crestUrl} size={48} />
-            </div>
-
-            <div className="flex-1 space-y-0.5">
-              <p className="text-xs text-white font-semibold flex items-center gap-1.5">
-                <span>Republic Hall Official Crest</span>
-                <span className="text-[10px] text-[#d4af37] font-bold uppercase tracking-wider">KNUST</span>
-              </p>
-              <p className="text-[11px] text-slate-400 leading-snug">
-                Official emblem ("SET THE PACE") automatically formatted onto the letterhead memorandum.
-              </p>
-            </div>
-          </div>
         </div>
 
         {/* 7. Electronic Signature */}
